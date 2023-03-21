@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS "loan_applications" (
+    "loan_id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "personal_id" INTEGER NOT NULL,
+    "name" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "term" INTEGER NOT NULL,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS "blacklist" (
+    "personal_id" INTEGER NOT NULL,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
