@@ -10,8 +10,8 @@ import (
 func routes() http.Handler {
 	mux := chi.NewRouter()
 
-	mux.Post("/loans", handlers.Repo.Loans)
-	mux.Post("/apply", handlers.Repo.Apply)
+	mux.Get("/api/loans", handlers.Repo.Loans)
+	mux.Post("/api/apply", handlers.Repo.Apply)
 
 	return mux
 }

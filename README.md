@@ -23,14 +23,14 @@ cd cmd
 ```
 go run .
 ```
-3. From another terminal window, use the following commands to make POST requests to the application:
-* To apply for a loan, run the following command:
+3. Use Postmaster, Insomnia or another terminal window to make GET and POST requests to the application:
+* To view a user's loans, run the following command in another terminal window:
     ```
-    curl -X POST localhost:8080/apply -d 'personal_id=5&name=Super+Mario&amount=5000&term=24'
+    curl -X GET localhost:8080/api/loans -d 'personal_id=2'
     ```
-* To view a user's loans, run the following command:
+* To apply for a loan, run the following command in another terminal window:
     ```
-    curl -X POST localhost:8080/loans -d 'personal_id=2'
+    curl -X POST localhost:8080/api/apply -d 'personal_id=5&name=Super+Mario&amount=5000&term=24'
     ```
 
 ## Dependencies
