@@ -13,7 +13,7 @@ func ClientError(w http.ResponseWriter, errorMsg string, status int) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(400)
+	w.WriteHeader(status)
 	w.Write(jsonData)
 }
 
