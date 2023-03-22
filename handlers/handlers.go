@@ -47,7 +47,6 @@ func (m *Repository) Loans(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	if len(loans) > 0 {
 		for _, loan := range loans {
 			monthlyPayment := math.Round((float64(loan.Amount) * 0.05) / (1 - math.Pow(1+0.05, -float64(loan.Term))) * 100) / 100
@@ -63,6 +62,7 @@ func (m *Repository) Loans(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, http.StatusText(http.StatusInternalServerError), 500)
 				return
 			}
+			w.Header().Set("Content-Type", "application/json")
 			w.Write(jsonData)
 		}
 	} else {
