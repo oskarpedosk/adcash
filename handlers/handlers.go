@@ -5,6 +5,7 @@ import (
 	"adcash/models"
 	"adcash/repository"
 	"adcash/repository/dbrepo"
+	"encoding/json"
 	"fmt"
 	"math"
 	"net/http"
@@ -46,11 +47,23 @@ func (m *Repository) Loans(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	if len(loans) > 0 {
 		for _, loan := range loans {
-			monthlyPayment := (float64(loan.Amount) * 0.05) / (1 - math.Pow(1 + 0.05, -float64(loan.Term)))
-			loanMsg := fmt.Sprintf("Personal ID: %d\nName: %s\nAmount: %d\nTerm: %d months\nMonthly payment:  %.2f\n---------", loan.PersonalID, loan.Name, loan.Amount, loan.Term, monthlyPayment)
-			fmt.Fprintln(w, loanMsg)
+			monthlyPayment := math.Round((float64(loan.Amount) * 0.05) / (1 - math.Pow(1+0.05, -float64(loan.Term))) * 100) / 100
+			data := map[string]interface{}{
+				"personal_id": loan.PersonalID,
+				"name": loan.Name,
+				"amount": loan.Amount,
+				"term": loan.Term,
+				"monthly_payment": monthlyPayment,
+			}
+			jsonData, err := json.Marshal(data)
+			if err != nil {
+				http.Error(w, http.StatusText(http.StatusInternalServerError), 500)
+				return
+			}
+			w.Write(jsonData)
 		}
 	} else {
 		fmt.Fprintln(w, "User doesn't have any loans yet")
@@ -87,7 +100,7 @@ func (m *Repository) Apply(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Loan term must be a valid number")
 		return
 	}
-	
+
 	blacklisted, err := m.DB.IsBlacklisted(personalID)
 	if err != nil {
 		fmt.Fprintln(w, err)
@@ -123,7 +136,7 @@ func (m *Repository) Apply(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	monthlyPayment := (float64(amount) * 0.05) / (1 - math.Pow(1 + 0.05, -float64(term)))
+	monthlyPayment := math.Round((float64(amount) * 0.05) / (1 - math.Pow(1+0.05, -float64(term))) * 100) / 100
 
 	successMsg := fmt.Sprintf("Thanky you %s! Loan application has been submitted.\nLoan amount: %d\nTerm: %d months\nMonthly payment: %.2f\n---------", name, amount, term, monthlyPayment)
 	fmt.Fprintln(w, successMsg)
