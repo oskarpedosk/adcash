@@ -34,8 +34,6 @@ func (m *Repository) Loans(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/plain")
-
 	personalID, err := strconv.Atoi(r.FormValue("personal_id"))
 	if err != nil {
 		fmt.Fprintln(w, "Personal ID must be a valid number")
@@ -48,17 +46,23 @@ func (m *Repository) Loans(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintln(w, loans)
+	if len(loans) > 0 {
+		for _, loan := range loans {
+			monthlyPayment := (float64(loan.Amount) * 0.05) / (1 - math.Pow(1 + 0.05, -float64(loan.Term)))
+			loanMsg := fmt.Sprintf("Personal ID: %d\nName: %s\nAmount: %d\nTerm: %d months\nMonthly payment:  %.2f\n---------", loan.PersonalID, loan.Name, loan.Amount, loan.Term, monthlyPayment)
+			fmt.Fprintln(w, loanMsg)
+		}
+	} else {
+		fmt.Fprintln(w, "User doesn't have any loans yet")
+	}
 }
 
-func (m *Repository) PostApply(w http.ResponseWriter, r *http.Request) {
+func (m *Repository) Apply(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		fmt.Fprintln(w, "Error parsing form")
 		return
 	}
-
-	w.Header().Set("Content-Type", "text/plain")
 
 	personalID, err := strconv.Atoi(r.FormValue("personal_id"))
 	if err != nil {

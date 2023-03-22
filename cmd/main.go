@@ -33,6 +33,7 @@ func main() {
 	}
 }
 
+// Connect to DB
 func run() (*driver.DB, error) {
 	log.Println("Connecting to database...")
 	db, err := driver.ConnectDB(dsn)

@@ -40,7 +40,7 @@ func NewDatabase(dsn string) (*sql.DB, error) {
 
 // Initiate database with dummy data
 func (m *DB) InitDB(dsn string) error {
-	_, err := m.SQL.Query("select * from loan_applications;")
+	_, err := m.SQL.Query("SELECT * FROM loan_applications")
 	if err != nil {
 		err := m.PopulateDB("tables.sql")
 		if err != nil {

@@ -11,7 +11,7 @@ func routes() http.Handler {
 	mux := chi.NewRouter()
 
 	mux.Post("/loans", handlers.Repo.Loans)
-	mux.Post("/apply", handlers.Repo.PostApply)
+	mux.Post("/apply", handlers.Repo.Apply)
 
 	return mux
 }
