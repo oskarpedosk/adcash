@@ -79,7 +79,7 @@ func (m *Repository) Loans(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(201)
+	w.WriteHeader(200)
 	w.Write(jsonData)
 }
 
