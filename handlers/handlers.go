@@ -7,7 +7,6 @@ import (
 	"adcash/repository"
 	"adcash/repository/dbrepo"
 	"encoding/json"
-	"fmt"
 	"math"
 	"net/http"
 	"strconv"
@@ -122,7 +121,7 @@ func (m *Repository) Apply(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if blacklisted {
-		fmt.Fprintln(w, "Loan application rejected, please contact Adcash support")
+		helpers.ClientError(w, "loan application rejected, please contact Adcash support", 400)
 		return
 	}
 
